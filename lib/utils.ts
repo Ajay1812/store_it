@@ -1,11 +1,11 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+"use client";
+
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-export const pasrseStringify = (value:unknown) =>{
-  return JSON.parse(JSON.stringify(value))
-  
-}
+export const parseStringify = (value: unknown) =>
+  JSON.parse(JSON.stringify(value));
