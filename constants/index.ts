@@ -5,6 +5,33 @@ export const navItems = [
   { name : "Media", icon: '/assets/icons/video.svg', url: '/media'},
   { name : "Others", icon: '/assets/icons/others.svg', url: '/others'}
 ]
+export const actionsDropdownItems = [
+  {
+    label: "Rename",
+    icon: "/assets/icons/edit.svg",
+    value: "rename",
+  },
+  {
+    label: "Details",
+    icon: "/assets/icons/info.svg",
+    value: "details",
+  },
+  {
+    label: "Share",
+    icon: "/assets/icons/share.svg",
+    value: "share",
+  },
+  {
+    label: "Download",
+    icon: "/assets/icons/download.svg",
+    value: "download",
+  },
+  {
+    label: "Delete",
+    icon: "/assets/icons/delete.svg",
+    value: "delete",
+  },
+];
 
 export const avatarPlaceholderUrl =
   "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg";
