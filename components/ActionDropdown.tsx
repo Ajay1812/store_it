@@ -1,5 +1,5 @@
 "use client";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +16,9 @@ import Link from 'next/link';
 import { constructDownloadUrl } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Button } from '@/components/ui/button';
+import { deleteFile, renameFile, updateFileUsers } from "@/lib/actions/file.actions";
+import { usePathname } from "next/navigation";
+import { FileDetails, ShareInput } from "./ActionModelContent";
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [isModelOpen, setIsModelOpen] = useState(false)
@@ -23,6 +26,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [action, setAction] = useState<ActionType | null>(null)
   const [name, setName] = useState(file.name)
   const [isLoading, setIsLoading] = useState(false)
+  const [emails, setEmails] = useState<string[]>([])
+  const path = usePathname()
 
   const closeAllModels = () => {
     setIsModelOpen(false)
@@ -31,9 +36,28 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     setName(file.name)
     // setEmail()
   }
-
   const handleAction = async () => {
+    if (!action) return;
+    setIsLoading(true);
+    let success = false;
 
+    const actions = {
+      rename: () =>
+        renameFile({ fileId: file.$id, name, extension: file.extension, path }),
+      share: () => updateFileUsers({ fileId: file.$id, emails, path }),
+      delete: () => deleteFile({ fileId: file.$id, bucketFileId: file.bucketFileId, path })
+    };
+    success = await actions[action.value as keyof typeof actions]();
+    if (success) closeAllModels();
+    setIsLoading(false);
+  };
+
+  const handleRemoveUser = async (email: string) => {
+    const updatedEmails = emails.filter((e) => e !== email)
+    const success = await updateFileUsers({ fileId: file.$id, emails: updatedEmails, path })
+
+    if (success) setEmails(updatedEmails)
+    closeAllModels()
   }
 
   const renderDialogContent = () => {
@@ -45,12 +69,19 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         <DialogHeader className="flex flex-col gap-3">
           <DialogTitle className="text-center text-light-100">{label}</DialogTitle>
           {value === 'rename' && <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />}
+          {value === 'details' && <FileDetails file={file} />}
+          {value === 'share' && <ShareInput file={file} onInputChange={setEmails} onRemove={handleRemoveUser} />}
+          {value === 'delete' && (
+            <p>Are you sure you want to delete {" "}
+              <span className="delete-file-name">{file.name}?</span>
+            </p>
+          )}
         </DialogHeader>
         {['rename', 'delete', 'share'].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
             <Button onClick={closeAllModels} className="modal-cancel-button">Cancel</Button>
-            <Button type="submit" onClick={handleAction} className="modal-submit-buttonq">
-              <p className="captilize">{value}</p>
+            <Button onClick={handleAction} className="modal-submit-button">
+              <p className="capitalize">{value}</p>
               {isLoading && (
                 <Image src="/assets/icons/loader.svg" alt="loader" width={24} height={24} className="animate-spin" />
               )}
@@ -69,7 +100,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
           <Image src="/assets/icons/dots.svg" width={30} height={30} alt="dots" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel className="max-[200px] truncate">{file.name}</DropdownMenuLabel>
+          <DropdownMenuLabel className="max-w-[200px] truncate">{file.name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {actionsDropdownItems.map((actionItem) => (
             <DropdownMenuItem key={actionItem.label} onClick={() => {
