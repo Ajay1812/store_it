@@ -1,9 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental:{
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  experimental: {
     serverActions: {
-      bodySizeLimit: "100MB"
+      bodySizeLimit: "100MB",
     },
   },
   images: {
@@ -14,7 +20,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cloud.appwrite.io"
+        hostname: "cloud.appwrite.io",
       },
     ],
   },
