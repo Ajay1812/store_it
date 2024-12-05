@@ -93,7 +93,8 @@ export const verifySecret = async ({
 };
 
 export const getCurrentUser = async () => {
-  const { databases, account } = await createSessionClient();
+  try {
+    const { databases, account } = await createSessionClient();
   const result = await account.get();
   const user = await databases.listDocuments(
     appwriteConfig.databaseID,
@@ -102,6 +103,9 @@ export const getCurrentUser = async () => {
   );
   if (user.total <= 0) return null;
   return parseStringify(user.documents[0]);
+  } catch (error) {
+    handleError(error, "No Session found")
+  }
 };
 
 export const signOutUser = async () => {
