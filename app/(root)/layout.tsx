@@ -9,9 +9,33 @@ import { Toaster } from "@/components/ui/toaster";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "StoreIt File Management",
-  description: "StoreIt - The only storage solution you need",
-  metadataBase: new URL("https://files-management.vercel.app"),
+  title: "StoreIt - Your Storage Solution",
+  description:
+    "StoreIt helps you manage and organize your storage efficiently.",
+  openGraph: {
+    title: "StoreIt - Your Storage Solution",
+    description:
+      "StoreIt helps you manage and organize your storage efficiently.",
+    url: "https://files-management.vercel.app",
+    siteName: "StoreIt",
+    images: [
+      {
+        url: "/public/assets/images/dashboardPreview.png",
+        width: 1200,
+        height: 630,
+        alt: "StoreIt Preview Image",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "StoreIt - Your Storage Solution",
+    description:
+      "StoreIt helps you manage and organize your storage efficiently.",
+    images: ["/public/assets/images/dashboardPreview.png"],
+  },
 };
 
 export const dynamic = "force-dynamic";
