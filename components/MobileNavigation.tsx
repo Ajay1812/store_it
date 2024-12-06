@@ -1,32 +1,38 @@
-'use client'
+"use client";
 import {
   Sheet,
   SheetContent,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 import Image from "next/image";
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 import { navItems } from "@/constants";
-import Link from 'next/link'
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { signOutUser } from "@/lib/actions/user.actions";
 import FileUploader from "./FileUploader";
 
 interface Props {
-  $id: string
-  accountId: string
-  fullName: string
-  avatar: string
-  email: string
+  $id: string;
+  accountId: string;
+  fullName: string;
+  avatar: string;
+  email: string;
 }
 
-const MobileNavigation = ({ $id: ownerId, accountId, fullName, avatar, email, }: Props) => {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
+const MobileNavigation = ({
+  $id: ownerId,
+  accountId,
+  fullName,
+  avatar,
+  email,
+}: Props) => {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="mobile-header">
@@ -72,7 +78,7 @@ const MobileNavigation = ({ $id: ownerId, accountId, fullName, avatar, email, }:
                   <li
                     className={cn(
                       "mobile-nav-item",
-                      pathname === url && "shad-active",
+                      pathname === url && "shad-active"
                     )}
                   >
                     <Image
@@ -82,7 +88,7 @@ const MobileNavigation = ({ $id: ownerId, accountId, fullName, avatar, email, }:
                       height={24}
                       className={cn(
                         "nav-icon",
-                        pathname === url && "nav-icon-active",
+                        pathname === url && "nav-icon-active"
                       )}
                     />
                     <p>{name}</p>
@@ -110,8 +116,8 @@ const MobileNavigation = ({ $id: ownerId, accountId, fullName, avatar, email, }:
           </div>
         </SheetContent>
       </Sheet>
-    </header >
-  )
-}
+    </header>
+  );
+};
 
-export default MobileNavigation
+export default MobileNavigation;
